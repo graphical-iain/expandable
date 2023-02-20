@@ -1,0 +1,73 @@
+<div class="expandable"
+  [ngClass]="{
+    card: !noContainer,
+    expanded: expandAnimation,
+    'building-block-trigger': hasTrigger && buildingBlock,
+    'no-container': noContainer,
+    'disabled': disabled
+  }">
+  <div [ngClass]="{ 'form-icon-checkbox': !!additionalButton }">
+    <button *ngIf="!hasTrigger"
+      id="btnExpandableDetails-control-{{ instanceId }}"
+      class="header"
+      mat-flat-button
+      type="button"
+      color="expandable"
+      (click)="toggleExpand()"
+      attr.title="{{
+        showExpanded ? 'Click to close' : 'Click to show details'
+      }}"
+      attr.aria-expanded="{{ showExpanded }}"
+      attr.aria-controls="expand-region-{{ instanceId }}">
+      <div class="collapsed">
+        <ng-container *ngTemplateOutlet="collapsedContent"></ng-container>
+      </div>
+    </button>
+
+    <ng-content select="additional-button"></ng-content>
+  </div>
+
+  <div class="header trigger-header {{ alertClass }} {{
+      alertClass ? 'alert' : ''
+    }}"
+    [ngClass]="{ 'building-block': buildingBlock }"
+    *ngIf="hasTrigger">
+    <div class="collapsed"
+      [ngClass]="{ 'building-block__info': buildingBlock }">
+      <ng-container *ngTemplateOutlet="collapsedContent"></ng-container>
+    </div>
+    <div class="building-block__actions"
+      *ngIf="buildingBlock; else triggerButton">
+      <ng-container *ngTemplateOutlet="triggerButton"></ng-container>
+    </div>
+
+    <ng-template #triggerButton>
+      <button type="button"
+        id="btnExpandableDetails-control-{{ instanceId }}"
+        *ngIf="!hideTrigger"
+        class="color-{{ triggerColor }} trigger"
+        [ngClass]="{ 'building-block__action': buildingBlock }"
+        (click)="toggleExpand()"
+        attr.aria-expanded="{{ showExpanded }}"
+        attr.aria-controls="expand-region-{{ instanceId }}">
+        <ng-content select="trigger"></ng-content>
+      </button>
+    </ng-template>
+  </div>
+
+  <ng-template #collapsedContent>
+    <ng-content select="collapsed"></ng-content>
+  </ng-template>
+
+  <div #expandedBody
+    *ngIf="expandedContent || renderContent"
+    class="body {{ alertClass }}"
+    [hidden]="!showExpanded && !renderContent"
+    tabindex="-1"
+    role="region"
+    id="expand-region-{{ instanceId }}">
+    <div class="expanded-wrap">
+      <ng-content select="expanded"></ng-content>
+    </div>
+  </div>
+</div>
