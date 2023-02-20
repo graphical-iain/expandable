@@ -1,0 +1,344 @@
+@use "sass:map";
+@use "functions";
+@use "settings";
+
+.expandable {
+  padding: 0;
+  transition: margin 300ms ease-in-out;
+
+  &.card {
+    background-color: #fff;
+  }
+
+  &.expanded {
+    transition: margin 500ms ease-in-out;
+
+    &:not(.no-container) {
+      margin-left: -0.5em;
+      margin-right: -0.5em;
+    }
+  }
+
+  &.disabled {
+    h1 {
+      color: var(--gray-dark);
+    }
+    trigger mat-icon {
+      display: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      transition: none !important;
+    }
+  }
+
+  .header {
+    padding: 1em;
+    border: none;
+    width: 100%;
+    outline: none;
+    border-radius: 0;
+    text-align: left;
+    line-height: 1.4;
+    border-radius: settings.$border-radius-control;
+  }
+
+  .trigger-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0;
+    margin: 0;
+
+    .collapsed {
+      width: 75%;
+      padding-right: 2%;
+
+      &.building-block__info {
+        padding: 1em;
+      }
+
+      @include functions.minq(xs) {
+        width: 100%;
+      }
+    }
+
+    .radio-icon {
+      font-size: 0.65em;
+
+      @include functions.minq(xs) {
+        font-size: 0.8em;
+      }
+    }
+
+    .mat-flat-button {
+      width: 25%;
+
+      @include functions.minq(xs) {
+        width: auto;
+      }
+    }
+
+    .item-title-wrapper {
+      width: 100%;
+      overflow: hidden;
+      padding: 0.2em;
+
+      .values-container {
+        width: 100%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
+  }
+
+  .form-icon-checkbox {
+    margin: 0;
+
+    .mat-expandable {
+      border-radius: settings.$border-radius-control 0 0 settings.$border-radius-control;
+    }
+
+    additional-button button {
+      height: 100%;
+      border-top-width: 0;
+      border-right-width: 0;
+      border-bottom-width: 0;
+    }
+  }
+}
+
+button.header {
+  white-space: normal;
+
+  &:hover,
+  &.cdk-keyboard-focused {
+    & ~ .body .expanded-wrap::before {
+      border-color: transparent;
+      transition: border-color 300ms;
+    }
+  }
+}
+
+.body {
+  transition: height 300ms ease-in-out, opacity 300ms;
+  opacity: 0;
+
+  .building-block-trigger & {
+    border-top: 1px solid map.get($map: settings.$gray, $key: light);
+  }
+
+  .expanded & {
+    opacity: 1;
+    transition: height 500ms cubic-bezier(0.62, 0, 0.37, 1.3), opacity 400ms 200ms;
+  }
+}
+
+.expanded-wrap {
+  position: relative;
+
+  .expandable:not(.no-container) & {
+    padding: 0 1em 1em;
+  }
+
+  &::before {
+    content: "";
+    display: block;
+    position: relative;
+    top: 0;
+    margin-bottom: 1.5em;
+    border-top: 1px solid map.get($map: settings.$gray, $key: light);
+
+    .building-block-trigger & {
+      border: none;
+    }
+  }
+
+  .driver-expandable & {
+    padding-bottom: 0;
+
+    &::before {
+      margin-bottom: 0.5em;
+    }
+  }
+}
+
+.form-expandable {
+  .header {
+    padding: 1em 1.5em;
+  }
+
+  .expanded {
+    margin-bottom: 1em;
+  }
+}
+
+.mat-expandable.header {
+  position: relative;
+
+  &::before,
+  &::after {
+    content: "";
+    font-size: 0.8em;
+    width: 0.5em;
+    height: 0.5em;
+    border-radius: 2px;
+    position: absolute;
+    right: 1em;
+    top: 1em;
+    transition: transform 200ms;
+  }
+
+  &::before {
+    border-left: 0.2em solid map.get(settings.$pallet-primary, main);
+    border-bottom: 0.2em solid map.get(settings.$pallet-primary, main);
+    transform: translate(-0.15em, 0.2em);
+    @include functions.minq(sm) {
+      transform: translate(-0.3em, 0.3em);
+    }
+  }
+
+  &::after {
+    border-right: 0.2em solid map.get(settings.$pallet-primary, main);
+    border-top: 0.2em solid map.get(settings.$pallet-primary, main);
+    transform: translate(0.2em, -0.2em);
+    @include functions.minq(sm) {
+      transform: translate(0.3em, -0.3em);
+    }
+  }
+
+  .expanded & {
+    &::before {
+      transform: translate(0.35em, -0.35em);
+
+      @include functions.minq(sm) {
+        transform: translate(0.4em, -0.4em);
+      }
+    }
+
+    &::after {
+      transform: translate(-0.4em, 0.35em);
+
+      @include functions.minq(sm) {
+        transform: translate(-0.4em, 0.4em);
+      }
+    }
+  }
+
+  .collapsed-content {
+    display: flex;
+    align-items: center;
+
+    &::before {
+      margin-right: 1.5em;
+    }
+  }
+}
+
+.item-title-wrapper {
+  .label {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+.item-title-wrapper {
+  display: flex;
+  align-items: center;
+  color: map.get(settings.$pallet-primary, dark);
+  font-weight: normal;
+
+  &[data-first-letter]::before {
+    @extend %icon-wrapper;
+    content: attr(data-first-letter);
+    margin-right: 0.5em;
+    font-weight: 700;
+    font-size: 2.7em;
+    display: block;
+    width: 1em;
+    text-align: center;
+    height: 1em;
+    min-width: 0;
+  }
+
+  p {
+    margin: 0;
+    line-height: 1.3;
+  }
+}
+
+trunk-expandable-checkbox {
+  display: block;
+  &.ng-star-inserted {
+    @extend %fade-slide-in-down;
+  }
+  .expandable {
+    opacity: 1;
+  }
+  &.fade-out .expandable {
+    margin-top: -4.5em;
+    opacity: 0;
+    transition: margin 500ms 100ms ease-in-out, opacity 400ms;
+  }
+}
+.expandable-checkbox {
+  &.disabled {
+    .expandable {
+      border-color: rgba(map.get(settings.$gray, accent), 0.6);
+    }
+    .mat-expandable.header {
+      opacity: 0.6;
+      color: map.get(settings.$gray, dark);
+    }
+  }
+
+  [label] {
+    font-weight: settings.$font-weight-normal;
+    line-height: 1.4;
+    font-size: 1.1rem;
+  }
+  .mat-expandable.header {
+    @extend %checkbox-label;
+    font-size: 1.1rem !important;
+    padding: 1em 1.5em !important;
+  }
+  .expanded .mat-expandable.header {
+    @extend %checkbox-label-checked;
+  }
+  .expanded {
+    margin-left: 0;
+    margin-right: 0;
+    additional-button .mat-button {
+      border-bottom-width: 1px;
+      margin-bottom: -1px;
+      height: calc(100% + 1px);
+    }
+  }
+  .mat-expandable.header {
+    .expanded,
+    & {
+      display: flex;
+      align-items: center;
+      &::after,
+      &::before {
+        transform: none;
+        font-size: inherit;
+        border: none;
+        position: static;
+        top: auto;
+        left: auto;
+      }
+    }
+  }
+}
+
+.expand-checkbox-add-veh{
+  .expanded .body{
+    height: auto !important;
+    overflow: auto !important;
+  }
+}

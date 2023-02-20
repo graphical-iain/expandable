@@ -1,0 +1,71 @@
+@use "sass:color";
+@use "sass:map";
+$brand: "my-brand-one";
+$type-kit-id: "[typekit ID]";
+$img-dashed-line: '<svg enable-background="new 0 0 237 71.9" viewBox="0 0 237 71.9" xmlns="http://www.w3.org/2000/svg"><path d="m101.9 0h114.2c4.5 0 8.2 3.6 8.2 8.2 0 4.5-3.6 8.2-8.2 8.2h-114.2c-4.5 0-8.2-3.6-8.2-8.2s3.7-8.2 8.2-8.2z" fill="#0677A7"/><path d="m237 54.5v17.4h-237v-17.4z" fill="#249590"/></svg>';
+
+$hero-image: url("/images/girl-car-bg.jpg");
+$check-mark: url("/images/apparent-check.svg");
+
+$font-main: "proxima-nova", sans-serif;
+$font-weight-bold: 700;
+$font-weight-semi: 600;
+$font-weight-normal: 300;
+
+// imported colors
+$gray: (
+  dark: #5f7388,
+  medium: color.mix(#c2d0e0, #666),
+  light: #c2d0e0,
+  lighter: #dfe8f0,
+  lightest: #f6f8fa,
+  light-warm: #e7e9e8,
+  accent: #bfd0df,
+);
+
+// element settings
+$border-radius-control: 0.4em;
+$border-radius-container: 0.4em;
+
+// Angular Material Mappings
+$pallet-primary: (
+  lightest: #e1f1f9,
+  lighter: #79c4e8,
+  light: #0095d5,
+  main: #0677a7,
+  dark: #183963,
+  contrast: (
+    lightest: #183963,
+    lighter: #183963,
+    light: #fff,
+    main: #fff,
+    dark: #fff,
+  ),
+);
+
+$pallet-accent: (
+  lightest: #c0e9e9,
+  lighter: #86bdbd,
+  light: #7ec2be,
+  main: #06847d,
+  dark: color.adjust(#249590, $lightness: -10%),
+  contrast: (
+    light: #fff,
+    main: #fff,
+    dark: #fff,
+    alert: rgba(#7ec2be, 0.05),
+  ),
+);
+
+$pallet-warn: (
+  lightest: #fff1ec,
+  light: color.adjust(#d03712, $lightness: 15%),
+  main: #d03712,
+  dark: #b44025,
+  contrast: (
+    main: #fff,
+    dark: #fff,
+  ),
+);
+
+$ancillary-gradient: linear-gradient(155deg, map.get($pallet-primary, main) 20%, map.get($pallet-accent, main) 80%);

@@ -1,0 +1,331 @@
+@use 'sass:map';
+@use 'sass:string';
+@use 'sass:math';
+@use 'settings';
+
+@mixin mq($type, $bp) {
+  @media (#{$type}: #{$bp}) {
+    @content;
+  }
+}
+
+@mixin minq($bp) {
+  $bp-val: map.get(settings.$breakpoints, $bp);
+  @include mq('min-width', $bp-val) {
+    @content;
+  }
+}
+
+@mixin maxq($bp) {
+  $bp-val: map.get(settings.$breakpoints, $bp) - math.div(1rem, 16rem);
+  @include mq('max-width', $bp-val) {
+    @content;
+  }
+}
+
+@mixin minmaxq($bpMin, $bpMax) {
+  $bp-min-val: map.get(settings.$breakpoints, $bpMin);
+  $bp-max-val: map.get(settings.$breakpoints, $bpMax) - math.div(1rem, 16rem);
+  @media (min-width: #{$bp-min-val}) and (max-width: #{$bp-max-val}) {
+    @content;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@mixin fade-in($speed: 400ms) {
+  animation: fade-in $speed;
+  animation-fill-mode: both;
+}
+
+%fade-in,
+.fade-in {
+  @include fade-in;
+}
+%fade-out,
+.fade-out {
+  @include fade-in;
+  animation-direction: reverse;
+}
+
+@mixin visuallyHidden {
+  position: absolute !important;
+  clip: rect(1px 1px 1px 1px); /* IE6, IE7 */
+  clip: rect(1px, 1px, 1px, 1px);
+  padding: 0 !important;
+  border: 0 !important;
+  height: 1px !important;
+  width: 1px !important;
+  overflow: hidden;
+}
+
+%visually-hidden,
+.sr-only {
+  @include visuallyHidden;
+}
+
+.sr-only-sm {
+  @include maxq(sm) {
+    @include visuallyHidden();
+  }
+}
+
+@keyframes fade-slide-in-up {
+  0% {
+    transform: translateY(1em);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@mixin fade-slide-in-up {
+  animation: fade-slide-in-up 400ms ease-in-out;
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+}
+
+.fade-slide-in-up,
+%fade-slide-in-up {
+  @include fade-slide-in-up;
+}
+
+@keyframes fade-slide-in-down {
+  from {
+    transform: translateY(-1em);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@mixin fade-slide-in-down($duration: 400ms) {
+  animation: fade-slide-in-down $duration ease-out;
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+}
+
+.fade-slide-in-down,
+%fade-slide-in-down {
+  @include fade-slide-in-down;
+}
+
+.fade-slide-out-up,
+%fade-slide-out-up {
+  @include fade-slide-in-down;
+  animation-direction: reverse;
+  animation-fill-mode: both;
+}
+
+@keyframes fade-slide-in-left {
+  from {
+    transform: translateX(-5%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@mixin fade-slide-in-left {
+  animation: fade-slide-in-left 400ms ease-out;
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+}
+
+@mixin fade-slide-out-left {
+  animation: fade-slide-in-left reverse 500ms;
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+}
+
+.fade-slide-in-left,
+%fade-slide-in-left {
+  @include fade-slide-in-left;
+}
+
+@keyframes fade-slide-in-right {
+  from {
+    transform: translateX(1em);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@mixin fade-slide-in-right($delay: 0ms) {
+  animation: fade-slide-in-right 500ms $delay ease-out;
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+}
+
+@mixin fade-slide-out-right {
+  animation: fade-slide-in-right reverse 500ms ease-in;
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+}
+
+.fade-slide-in-right,
+%fade-slide-in-right {
+  @include fade-slide-in-right;
+}
+
+@mixin icon-wrapper {
+  border-radius: 50%;
+  border: 0.2em solid #fff;
+  background: #fff;
+  box-shadow: var(--gray-lighter) 0 0 0 0.125rem;
+  color: var(--gray-lighter);
+  line-height: 1;
+  min-width: 4em;
+  height: 4em;
+  font-size: 0.7em;
+}
+%icon-wrapper,
+.icon-wrapper {
+  @include icon-wrapper;
+}
+
+@mixin width {
+  width: 95%;
+  max-width: 90em;
+  margin: 0 auto;
+
+  @include minq(sm) {
+    width: 90%;
+  }
+}
+
+%width,
+.width {
+  @include width;
+}
+
+/// Replace `$search` with `$replace` in `$string`
+/// @author Hugo Giraudel
+/// @param {String} $string - Initial string
+/// @param {String} $search - Substring to replace
+/// @param {String} $replace ('') - New value
+/// @return {String} - Updated string
+@function str-replace($string, $search, $replace: '') {
+  $index: string.index($string, $search);
+
+  @if $index {
+    @return string.slice($string, 1, $index - 1) + $replace +
+      str-replace(
+        string.slice($string, $index + string.length($search)),
+        $search,
+        $replace
+      );
+  }
+
+  @return $string;
+}
+
+@mixin dashed-top-border($color: var(--gray-accent)) {
+  background-image: linear-gradient(
+    to right,
+    $color 33%,
+    rgba(255, 255, 255, 0) 0%
+  );
+  background-position: left top;
+  background-size: 7% 2px;
+  background-repeat: repeat-x;
+}
+%dashed-top-border {
+  @include dashed-top-border;
+}
+
+%checkbox-label {
+  justify-content: flex-start;
+  align-items: flex-start;
+
+  &::before {
+    $color: str-replace(
+      '#{map.get(settings.$pallet-primary, main)}',
+      '#',
+      '%23'
+    );
+    content: '';
+    background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 22 22"><path fill="#{$color}" d="M16.25,3.55a2,2,0,0,1,2,2v13a2,2,0,0,1-2,2h-13a2,2,0,0,1-2-2v-13a2,2,0,0,1,2-2h13m0-1h-13a3,3,0,0,0-3,3v13h0a3,3,0,0,0,3,3h13a3,3,0,0,0,3-3h0v-13A3,3,0,0,0,16.25,2.55Z"/></svg>');
+    background-repeat: no-repeat;
+    width: 1.5em;
+    height: 1.5em;
+    display: block;
+    opacity: 0.6;
+    transition: opacity 200ms;
+    margin-right: 1rem;
+    flex-shrink: 0;
+  }
+  &:hover::after {
+    opacity: 1;
+  }
+}
+
+%checkbox-label-checked {
+  &::before {
+    $color: str-replace(
+      '#{map.get(settings.$pallet-primary, main)}',
+      '#',
+      '%23'
+    );
+    content: '';
+    background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 22 22"><path fill="#{$color}" d="M18.25,9.48v9.07a2,2,0,0,1-2,2h-13a2,2,0,0,1-2-2v-13a2,2,0,0,1,2-2H15.18l.75-1H3.25a3,3,0,0,0-3,3v13a3,3,0,0,0,3,3h13a3,3,0,0,0,3-3V8.14Z"/><path fill="#{$color}" d="M9.43,17.88A2.61,2.61,0,0,1,7.24,16.7L4,12.17A2,2,0,0,1,7.2,9.83l2.24,3.09,8.21-11a2,2,0,0,1,3.2,2.4h0L11.5,16.84a2.66,2.66,0,0,1-.79.7A2.61,2.61,0,0,1,9.43,17.88Z"/></svg>');
+    opacity: 1;
+  }
+}
+
+@function makeInlineSVG($svg) {
+  $svg: str-replace('#{$svg}', '#', '%23');
+  @return url('data:image/svg+xml;utf8,#{$svg}');
+}
+
+%icon-edit {
+  &::before {
+    content: '';
+    display: block;
+    width: 1.1em;
+    height: 1.1em;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-image: url('data:image/svg+xml;utf8,<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 115.05 114.91"><path fill="%230677a7" d="M115.72,29.58h0A14.49,14.49,0,0,0,116,9.1c-.1-.09-.19-.19-.29-.29A14.79,14.79,0,0,0,95,8.81l-7.9,7.91,20.77,20.77Zm-14,14L80.9,22.85,19.47,84.31c-.3.29-.3.29-.3.59l-14,33c-.29.88.3,1.77,1.47,1.46l32.76-13.75c.3,0,.3-.29.59-.29Z" transform="translate(-5.06 -4.55)"/></svg>');
+  }
+}
+
+%icon-remove {
+  content: '';
+  display: block;
+  width: 1.1em;
+  height: 1.1em;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-image: makeInlineSVG(
+    '<svg role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="#{map.get(settings.$pallet-warn, main)}" d="M268 416h24a12 12 0 0 0 12-12V188a12 12 0 0 0-12-12h-24a12 12 0 0 0-12 12v216a12 12 0 0 0 12 12zM432 80h-82.41l-34-56.7A48 48 0 0 0 274.41 0H173.59a48 48 0 0 0-41.16 23.3L98.41 80H16A16 16 0 0 0 0 96v16a16 16 0 0 0 16 16h16v336a48 48 0 0 0 48 48h288a48 48 0 0 0 48-48V128h16a16 16 0 0 0 16-16V96a16 16 0 0 0-16-16zM171.84 50.91A6 6 0 0 1 177 48h94a6 6 0 0 1 5.15 2.91L293.61 80H154.39zM368 464H80V128h288zm-212-48h24a12 12 0 0 0 12-12V188a12 12 0 0 0-12-12h-24a12 12 0 0 0-12 12v216a12 12 0 0 0 12 12z"></path></svg>'
+  );
+}
+
+%text-outline {
+  $shadowColor: rgba(#fff, 1);
+  text-shadow: -1px -1px 1px $shadowColor, 1px -1px 1px $shadowColor,
+    -1px 1px 1px $shadowColor, 1px 1px 1px $shadowColor;
+}

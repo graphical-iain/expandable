@@ -2,6 +2,8 @@
 # Expandable
 Module to show a collapsed state by default and show details when the user clicks.
 
+*This code is taken out of an Angular context with multiple brand configurations. The Sass is broken up the way it is to accommodate this architecture.*
+
 ![example](https://i.imgur.com/5cxGNmX.gif)
 
 ## Basic Usage
@@ -40,12 +42,12 @@ In your component template:
 
 ## `on-collapse` usage:
 ```
-  <expandable [on-collapse]="functionName"> 
+  <expandable [on-collapse]="functionName">
     ...
   </expandable>
 ```
-> Note: if you need access to your `this` scope in the passed function, be sure to bind it in your constructor. 
-> As such: 
+> Note: if you need access to your `this` scope in the passed function, be sure to bind it in your constructor.
+> As such:
 > ```
 > constructor() { this.functionName = this.functionName.bind(this); }
 > ```

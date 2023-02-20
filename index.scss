@@ -1,0 +1,32 @@
+//brand index
+@use "brand-settings" as settings;
+@use "lib-styles/index" with (
+  $type-kit-id: settings.$type-kit-id,
+  $img-dashed-line: settings.$img-dashed-line,
+  $hero-image: settings.$hero-image,
+  $check-mark: settings.$check-mark,
+  $font-main: settings.$font-main,
+  $font-weight-bold: settings.$font-weight-bold,
+  $font-weight-semi: settings.$font-weight-semi,
+  $font-weight-normal: settings.$font-weight-normal,
+  $gray: settings.$gray,
+  $border-radius-control: settings.$border-radius-control,
+  $border-radius-container: settings.$border-radius-container,
+  $pallet-primary: settings.$pallet-primary,
+  $pallet-accent: settings.$pallet-accent,
+  $pallet-warn: settings.$pallet-warn,
+  $ancillary-gradient: settings.$ancillary-gradient
+);
+
+// @forward "function-overrides";
+// @use "form-fields";
+// @use "layout";
+// @use "header";
+// @use "page";
+
+// @use "checkout";
+// @use "covered";
+// @use "landing";
+// @use "sidebar";
+// @use "quote";
+// @use "test-drive";

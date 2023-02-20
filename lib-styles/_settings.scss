@@ -1,0 +1,24 @@
+$breakpoints: (
+  xxs: 30em,
+  xs: 40em,
+  sm: 60em,
+  md: 80em,
+  lg: 100em,
+  xl: 120em,
+);
+
+$type-kit-id: '' !default;
+$img-dashed-line: '' !default;
+$hero-image: '' !default;
+$check-mark: '' !default;
+$font-main: '' !default;
+$font-weight-bold: '' !default;
+$font-weight-semi: '' !default;
+$font-weight-normal: '' !default;
+$gray: '' !default;
+$border-radius-control: '' !default;
+$border-radius-container: '' !default;
+$pallet-primary: () !default;
+$pallet-accent: () !default;
+$pallet-warn: () !default;
+$ancillary-gradient: '' !default;
